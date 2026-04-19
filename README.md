@@ -9,6 +9,9 @@ The app gives a quick overview of:
 - delay distribution by supplier and by country
 - supplier-level drill-down with order data
 
+## Live demo
+
+The application is available here: https://procurement-risk-dashboard.niquick.com/
 ---
 
 ## Technology stack
