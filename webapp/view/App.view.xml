@@ -1,0 +1,7 @@
+<mvc:View
+	controllerName="procurement.risk.dashboard.controller.App"
+	displayBlock="true"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc">
+	<App id="mainApp" busyIndicatorDelay="0" />
+</mvc:View>

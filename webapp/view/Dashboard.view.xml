@@ -1,0 +1,366 @@
+<mvc:View
+
+	controllerName="procurement.risk.dashboard.controller.Dashboard"
+
+	displayBlock="true"
+
+	xmlns="sap.m"
+
+	xmlns:f="sap.f"
+
+	xmlns:l="sap.ui.layout"
+
+	xmlns:core="sap.ui.core"
+
+	xmlns:mvc="sap.ui.core.mvc"
+
+	xmlns:viz="sap.viz.ui5.controls"
+
+>
+
+	<f:DynamicPage id="dashPage" class="prdDashboardPage" headerExpanded="true" showFooter="false">
+
+		<f:title>
+
+			<f:DynamicPageTitle>
+
+				<f:heading>
+
+					<Title text="{i18n>targetDashboardTitle}" wrapping="true" />
+
+				</f:heading>
+
+				<f:snappedContent>
+
+					<Text text="{i18n>appDescription}" />
+
+				</f:snappedContent>
+
+				<f:actions>
+
+					<ToolbarSpacer />
+
+					<Button text="{i18n>btnSuppliers}" type="Emphasized" icon="sap-icon://supplier" press=".onNavToSuppliers" />
+
+				</f:actions>
+
+			</f:DynamicPageTitle>
+
+		</f:title>
+
+		<f:content>
+
+			<VBox busy="{view>/ui/busyKpi}">
+
+				<Panel backgroundDesign="Transparent" class="prdHeroPanel sapUiResponsiveMargin">
+
+					<headerToolbar>
+
+						<Toolbar design="Transparent">
+
+							<Title text="{i18n>panelExecKpis}" level="H2" />
+
+							<ToolbarSpacer />
+
+							<BusyIndicator class="prdKpiBusy" size="1.2rem" visible="{= ${view>/ui/busyKpi} }" />
+
+						</Toolbar>
+
+					</headerToolbar>
+
+					<l:Grid defaultSpan="L2 M4 S12" width="100%" class="prdKpiGrid" vSpacing="1" hSpacing="1">
+
+						<GenericTile header="{i18n>tileTotalSuppliers}" class="prdKpiTile" frameType="OneByOne">
+							<tileContent>
+								<TileContent>
+									<NumericContent value="{view>/kpi/totalSuppliers}" withMargin="false" class="prdNum" />
+								</TileContent>
+							</tileContent>
+						</GenericTile>
+
+						<GenericTile header="{i18n>tileTotalOrders}" class="prdKpiTile prdKpiTileOrderCount" frameType="OneByOne">
+							<tileContent>
+								<TileContent>
+									<Text
+										text="{ parts: [{path: 'view>/kpi/totalOrders'}], formatter: '.formatter.formatPlainInteger' }"
+										class="prdKpiOrderValueText" />
+								</TileContent>
+							</tileContent>
+						</GenericTile>
+
+						<GenericTile header="{i18n>tileOnTimeRate}" class="prdKpiTile prdKpiGreen" frameType="OneByOne">
+							<tileContent>
+								<TileContent>
+									<NumericContent
+										value="{ parts: [{path: 'view>/kpi/onTimePaymentRate'}], formatter: '.formatter.formatKpiNumber' }"
+										scale="%"
+										withMargin="false"
+										valueColor="Good" />
+								</TileContent>
+							</tileContent>
+						</GenericTile>
+
+						<GenericTile header="{i18n>tileLateRate}" class="prdKpiTile prdKpiRed" frameType="OneByOne">
+							<tileContent>
+								<TileContent>
+									<NumericContent
+										value="{ parts: [{path: 'view>/kpi/latePaymentRate'}], formatter: '.formatter.formatKpiNumber' }"
+										scale="%"
+										withMargin="false"
+										valueColor="Error" />
+								</TileContent>
+							</tileContent>
+						</GenericTile>
+
+						<GenericTile header="{i18n>tileAvgDelayKpi}" class="prdKpiTile" frameType="OneByOne">
+							<tileContent>
+								<TileContent>
+									<NumericContent
+										value="{ parts: [{path: 'view>/kpi/averageDelayLateOnly'}], formatter: '.formatter.formatKpiNumber' }"
+										scale="d"
+										withMargin="false"
+										class="prdNum" />
+								</TileContent>
+							</tileContent>
+						</GenericTile>
+
+						<GenericTile header="{i18n>tileTotalRevenue}" class="prdKpiTile" frameType="OneByOne">
+							<tileContent>
+								<TileContent>
+									<NumericContent
+										value="{path: 'view>/kpi/revenueKpiDisplayValue'}"
+										scale="{path: 'view>/kpi/revenueKpiDisplayScale'}"
+										withMargin="false"
+										class="prdNum" />
+								</TileContent>
+							</tileContent>
+						</GenericTile>
+
+					</l:Grid>
+
+				</Panel>
+
+
+
+				<Panel expandable="true" expanded="true" class="sapUiResponsiveMargin prdLegendPanel">
+
+					<headerToolbar>
+
+						<Toolbar>
+
+							<core:Icon src="sap-icon://legend" class="sapUiTinyMarginEnd" />
+
+							<Title text="{i18n>legendRiskPaymentTitle}" />
+
+						</Toolbar>
+
+					</headerToolbar>
+
+					<MessageStrip type="Success" showIcon="true" text="{i18n>legendGreenPay}" class="sapUiTinyMarginBottom" />
+
+					<MessageStrip type="Warning" showIcon="true" text="{i18n>legendYellowPay}" class="sapUiTinyMarginBottom" />
+
+					<MessageStrip type="Error" showIcon="true" text="{i18n>legendRedPay}" />
+
+				</Panel>
+
+
+
+				<Title text="{i18n>riskDistributionTitle}" level="H3" class="sapUiResponsiveMargin sapUiSmallMarginBegin sapUiTinyMarginBottom" />
+
+				<l:Grid defaultSpan="L4 M12 S12" width="100%" class="sapUiResponsiveMargin prdRiskDistGrid" hSpacing="2" vSpacing="1">
+
+					<VBox>
+
+						<layoutData>
+
+							<l:GridData span="L4 M12 S12" />
+
+						</layoutData>
+
+						<Title text="{i18n>chartRiskSuppliersPie}" level="H4" class="sapUiTinyMarginBottom" />
+
+						<Panel backgroundDesign="Transparent" class="prdChartsPanel prdRiskPiePanel" busy="{view>/ui/busyCharts}">
+
+							<viz:VizFrame id="vizRiskPieDashboard" height="360px" width="100%" vizType="pie" legendVisible="true" />
+
+						</Panel>
+
+					</VBox>
+
+					<VBox>
+
+						<layoutData>
+
+							<l:GridData span="L4 M12 S12" />
+
+						</layoutData>
+
+						<Title text="{i18n>chartRiskOrdersPie}" level="H4" class="sapUiTinyMarginBottom" />
+
+						<Panel backgroundDesign="Transparent" class="prdChartsPanel prdRiskPiePanel" busy="{view>/ui/busyCharts}">
+
+							<viz:VizFrame id="vizOrdersRiskPieDashboard" height="360px" width="100%" vizType="pie" legendVisible="true" />
+
+						</Panel>
+
+					</VBox>
+
+					<VBox>
+
+						<layoutData>
+
+							<l:GridData span="L4 M12 S12" />
+
+						</layoutData>
+
+						<Title text="{i18n>chartRevenueRiskPie}" level="H4" class="sapUiTinyMarginBottom" />
+
+						<Panel backgroundDesign="Transparent" class="prdChartsPanel prdRiskPiePanel" busy="{view>/ui/busyCharts}">
+
+							<viz:VizFrame id="vizRevenueRiskPieDashboard" height="360px" width="100%" vizType="pie" legendVisible="true" />
+
+						</Panel>
+
+					</VBox>
+
+				</l:Grid>
+
+
+
+				<Panel backgroundDesign="Transparent" class="sapUiResponsiveMargin prdChartsPanel prdChartsMainPanel" busy="{view>/ui/busyCharts}">
+
+					<headerToolbar>
+
+						<Toolbar design="Transparent">
+
+							<Title text="{i18n>panelAnalytics}" level="H2" />
+
+							<ToolbarSpacer />
+
+							<BusyIndicator size="1.2rem" visible="{= ${view>/ui/busyCharts} }" />
+
+						</Toolbar>
+
+					</headerToolbar>
+
+					<l:Grid defaultSpan="L6 M12 S12" width="100%" class="prdChartGrid" vSpacing="2" hSpacing="2">
+
+						<VBox class="prdChartTile prdOrdersPerfTile">
+
+							<layoutData>
+
+								<l:GridData span="L12 M12 S12" linebreak="true" />
+
+							</layoutData>
+
+							<VBox width="100%" class="sapUiSmallMarginBottom prdPayPerfHeader">
+
+								<Title text="{i18n>chartOrdersStack}" level="H4" class="sapUiTinyMarginBottom" />
+
+								<VBox class="prdPayPerfSortBlock" width="100%">
+
+									<Label text="{i18n>sortPayPerfLabel}" class="sapUiTinyMarginBottom" />
+
+									<Select
+										items="{path: 'view>/paymentPerfSortItems'}"
+										selectedKey="{view>/dashboardPaymentPerfSort}"
+										change=".onPaymentPerfSortChange"
+										forceSelection="true"
+										width="100%"
+										class="prdPayPerfSelect">
+
+										<core:Item key="{view>key}" text="{view>text}" />
+
+									</Select>
+
+								</VBox>
+
+							</VBox>
+
+							<ScrollContainer
+
+								vertical="true"
+
+								horizontal="false"
+
+								height="72vh"
+
+								class="prdOrdersPerfScroll">
+
+								<viz:VizFrame id="vizOrdersStack" height="3400px" width="100%" vizType="stacked_bar" legendVisible="true" />
+
+							</ScrollContainer>
+
+						</VBox>
+
+
+
+						<VBox class="prdChartTile prdVolatilityTile">
+
+							<layoutData>
+
+								<l:GridData span="L12 M12 S12" linebreak="true" />
+
+							</layoutData>
+
+							<Title text="{i18n>chartVolatilityBubble}" level="H4" class="sapUiTinyMarginBottom" />
+
+							<Text text="{i18n>hintVolatilityBubbleClick}" class="sapUiTinyMarginBottom sapUiSmallMarginBegin" wrapping="true" />
+
+							<viz:VizFrame id="vizVolatilityBubble" height="400px" width="100%" vizType="bubble" legendVisible="false" />
+
+						</VBox>
+
+
+
+						<VBox class="prdChartTile prdLateCountryTile">
+
+							<layoutData>
+
+								<l:GridData span="L6 M12 S12" />
+
+							</layoutData>
+
+							<Title text="{i18n>chartLateCountry}" level="H4" class="sapUiTinyMarginBottom" />
+
+							<Text text="{i18n>hintCountryChartClick}" class="sapUiTinyMarginBottom sapUiSmallMarginBegin" wrapping="true" />
+
+							<viz:VizFrame id="vizLateCountry" height="400px" width="100%" vizType="stacked_bar" legendVisible="true" />
+
+						</VBox>
+
+
+
+						<VBox class="{= 'prdChartTile prdAvgDelayTile' + ( ${view>/dashboardChartCountry} ? ' prdFilteredStrip' : '' ) }">
+
+							<layoutData>
+
+								<l:GridData span="L6 M12 S12" />
+
+							</layoutData>
+
+							<Title text="{i18n>chartAvgDelay}" level="H4" class="sapUiTinyMarginBottom" />
+
+							<Text text="{i18n>hintAvgDelayChartClick}" class="sapUiTinyMarginBottom sapUiSmallMarginBegin" wrapping="true" />
+
+							<ScrollContainer horizontal="true" vertical="false" height="400px" class="prdChartScroll">
+
+								<viz:VizFrame id="vizAvgDelaySupplier" height="380px" width="5200px" vizType="column" legendVisible="false" />
+
+							</ScrollContainer>
+
+						</VBox>
+
+					</l:Grid>
+
+				</Panel>
+
+			</VBox>
+
+		</f:content>
+
+	</f:DynamicPage>
+
+</mvc:View>
+

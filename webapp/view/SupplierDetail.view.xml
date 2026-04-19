@@ -1,0 +1,106 @@
+<mvc:View
+	controllerName="procurement.risk.dashboard.controller.SupplierDetail"
+	displayBlock="true"
+	xmlns="sap.m"
+	xmlns:f="sap.f"
+	xmlns:form="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc">
+	<f:DynamicPage id="supplierDetailPage">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
+					<HBox alignItems="Center" width="100%" wrap="Wrap">
+						<Button icon="sap-icon://nav-back" tooltip="{i18n>hdrSuppliers}" press=".onNavSuppliers" class="sapUiTinyMarginEnd" />
+						<Title text="{view>/selectedSupplier/supplierName}" wrapping="true" />
+					</HBox>
+				</f:heading>
+				<f:expandedContent>
+					<Text text="{view>/selectedSupplier/supplierId}" />
+				</f:expandedContent>
+				<f:actions>
+					<Button text="{i18n>btnExportExcel}" icon="sap-icon://excel-attachment" type="Transparent" press=".onExportOrdersExcel" />
+					<Button text="{i18n>btnExportPdf}" icon="sap-icon://pdf-attachment" type="Transparent" press=".onExportOrdersPdf" />
+					<ObjectStatus
+						title="{view>/selectedSupplier/riskStatusText}"
+						state="{ parts: [{path: 'view>/selectedSupplier/riskStatus'}], formatter: '.formatter.riskState' }"
+						icon="{ parts: [{path: 'view>/selectedSupplier/riskStatus'}], formatter: '.formatter.riskIcon' }"
+						tooltip="{ parts: [{path: 'view>/selectedSupplier/riskStatus'}], formatter: '.formatter.riskTooltipHint' }" />
+				</f:actions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:content>
+			<VBox class="sapUiResponsiveMargin">
+				<Panel headerText="{i18n>detailTitle}">
+					<VBox class="sapUiSmallMargin">
+						<ObjectIdentifier title="{view>/selectedSupplier/supplierName}" text="{view>/selectedSupplier/country}" />
+					</VBox>
+				</Panel>
+
+				<Panel headerText="{i18n>detailKpiTitle}">
+					<form:SimpleForm editable="false" layout="ColumnLayout">
+						<form:content>
+							<Label text="{i18n>colOrders}" />
+							<Text text="{path: 'view>/selectedSupplier/totalOrders', type: 'sap.ui.model.type.Integer'}" />
+
+							<Label text="{i18n>colAmount}" />
+							<Text text="{ parts: [{path: 'view>/selectedSupplier/totalAmount'}], formatter: '.formatter.formatCurrencyEUR' }" />
+
+							<Label text="{i18n>colDelay}" />
+							<Text text="{ parts: [{path: 'view>/selectedSupplier/averagePaymentDelayDays'}], formatter: '.formatter.formatAvgDelayDays' }" />
+
+							<Label text="{i18n>colLatePct}" />
+							<Text text="{ parts: [{path: 'view>/selectedSupplier/latePercentage'}], formatter: '.formatter.formatPercent0to100' }" />
+
+							<Label text="{i18n>colLate}" />
+							<Text text="{path: 'view>/selectedSupplier/lateOrders', type: 'sap.ui.model.type.Integer'}" />
+
+							<Label text="{i18n>colOnTime}" />
+							<Text text="{ parts: [{path: 'view>/selectedSupplier/onTimePaymentRate'}], formatter: '.formatter.formatPercent' }" />
+
+							<Label text="{i18n>colRisk}" />
+							<ObjectStatus
+								title="{view>/selectedSupplier/riskStatusText}"
+								state="{ parts: [{path: 'view>/selectedSupplier/riskStatus'}], formatter: '.formatter.riskState' }"
+								icon="{ parts: [{path: 'view>/selectedSupplier/riskStatus'}], formatter: '.formatter.riskIcon' }" />
+						</form:content>
+					</form:SimpleForm>
+				</Panel>
+
+				<Panel headerText="{i18n>detailOrdersTitle}">
+					<Table
+						class="prdOrderTable"
+						items="{view>/selectedSupplier/orders}"
+						growing="true"
+						growingThreshold="20"
+						sticky="ColumnHeaders">
+						<columns>
+							<Column><Text text="{i18n>colOrderId}" /></Column>
+							<Column hAlign="End"><Text text="{i18n>colAmount}" /></Column>
+							<Column><Text text="{i18n>colDueDate}" /></Column>
+							<Column><Text text="{i18n>colPayDate}" /></Column>
+							<Column hAlign="End"><Text text="{i18n>colDelayDays}" /></Column>
+							<Column><Text text="{i18n>colStatus}" /></Column>
+						</columns>
+						<ColumnListItem>
+							<cells>
+								<Text text="{view>orderId}" />
+								<Text text="{ parts: [{path: 'view>amount'}], formatter: '.formatter.formatCurrencyEUR' }" />
+								<Text text="{ parts: [{path: 'view>dueDate'}], formatter: '.formatter.formatShortDate' }" />
+								<Text text="{ parts: [{path: 'view>paymentDate'}], formatter: '.formatter.formatShortDate' }" />
+								<ObjectNumber number="{path: 'view>delayDays', type: 'sap.ui.model.type.Integer'}" />
+								<ObjectStatus
+									text="{ parts: [{path: 'view>isLate'}], formatter: '.formatOrderLateStatusText' }"
+									state="{ parts: [{path: 'view>isLate'}], formatter: '.formatter.orderLateState' }" />
+							</cells>
+						</ColumnListItem>
+					</Table>
+				</Panel>
+
+				<Panel headerText="{i18n>detailRulesTitle}" expandable="true" expanded="false">
+					<MessageStrip text="{i18n>legendYellowPay}" type="Warning" showIcon="true" class="sapUiTinyMarginBottom" />
+					<MessageStrip text="{i18n>legendRedPay}" type="Error" showIcon="true" />
+				</Panel>
+			</VBox>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

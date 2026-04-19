@@ -1,0 +1,370 @@
+<mvc:View
+
+	controllerName="procurement.risk.dashboard.controller.SupplierList"
+
+	displayBlock="true"
+
+	xmlns="sap.m"
+
+	xmlns:f="sap.f"
+
+	xmlns:fb="sap.ui.comp.filterbar"
+
+	xmlns:core="sap.ui.core"
+
+	xmlns:mvc="sap.ui.core.mvc">
+
+	<f:DynamicPage id="supplierListPage" class="prdListPage">
+
+		<f:title>
+
+			<f:DynamicPageTitle>
+
+				<f:heading>
+
+					<HBox alignItems="Center" width="100%" wrap="Wrap">
+
+						<Button icon="sap-icon://nav-back" tooltip="{i18n>btnDashboard}" press=".onNavDashboard" class="sapUiTinyMarginEnd" />
+
+						<Title text="{i18n>hdrSuppliers}" wrapping="true" />
+
+					</HBox>
+
+				</f:heading>
+
+				<f:actions>
+
+					<Button text="{i18n>btnExportExcel}" icon="sap-icon://excel-attachment" type="Transparent" press=".onExportExcel" />
+
+					<Button text="{i18n>btnExportPdf}" icon="sap-icon://pdf-attachment" type="Transparent" press=".onExportPdf" />
+
+				</f:actions>
+
+			</f:DynamicPageTitle>
+
+		</f:title>
+
+		<f:header>
+
+			<f:DynamicPageHeader pinnable="true">
+
+				<VBox class="sapUiSmallMarginBottom">
+
+					<Toolbar design="Transparent" class="prdToolbar">
+
+						<SearchField
+
+							width="22rem"
+
+							value="{view>/filterState/search}"
+
+							placeholder="{i18n>searchPlaceholder}" />
+
+						<ToolbarSpacer />
+
+						<Text text="{i18n>filterHintGo}" class="sapUiTinyMarginEnd" />
+
+					</Toolbar>
+
+					<fb:FilterBar
+
+						id="listFilterBar"
+
+						persistencyKey="prd.filter.list"
+
+						useToolbar="false"
+
+						filterBarExpanded="true"
+
+						showClearOnFB="true"
+
+						showFilterConfiguration="false"
+
+						clear=".onFilterClear"
+
+						search=".onFilterSearch">
+
+						<fb:filterGroupItems>
+
+							<fb:FilterGroupItem name="country" label="{i18n>filterCountry}" groupName="prd" visibleInFilterBar="true">
+
+								<fb:control>
+
+									<ComboBox
+
+										items="{path: 'view>/countryItems'}"
+
+										selectedKey="{view>/filterState/country}">
+
+										<core:Item key="{view>key}" text="{view>text}" />
+
+									</ComboBox>
+
+								</fb:control>
+
+							</fb:FilterGroupItem>
+
+							<fb:FilterGroupItem name="risk" label="{i18n>filterRisk}" groupName="prd" visibleInFilterBar="true">
+
+								<fb:control>
+
+									<ComboBox
+
+										items="{path: 'view>/riskItems'}"
+
+										selectedKey="{view>/filterState/riskStatus}">
+
+										<core:Item key="{view>key}" text="{view>text}" />
+
+									</ComboBox>
+
+								</fb:control>
+
+							</fb:FilterGroupItem>
+
+							<fb:FilterGroupItem name="delay" label="{i18n>filterDelayRange}" groupName="prd" visibleInFilterBar="true">
+
+								<fb:control>
+
+									<ComboBox
+
+										items="{path: 'view>/delayRangeItems'}"
+
+										selectedKey="{view>/filterState/delayRange}">
+
+										<core:Item key="{view>key}" text="{view>text}" />
+
+									</ComboBox>
+
+								</fb:control>
+
+							</fb:FilterGroupItem>
+
+							<fb:FilterGroupItem name="abmahnung" label="{i18n>filterAbmahnung}" groupName="prd" visibleInFilterBar="true">
+
+								<fb:control>
+
+									<ComboBox
+
+										items="{path: 'view>/abmahnungItems'}"
+
+										selectedKey="{view>/filterState/abmahnungMin}">
+
+										<core:Item key="{view>key}" text="{view>text}" />
+
+									</ComboBox>
+
+								</fb:control>
+
+							</fb:FilterGroupItem>
+
+						</fb:filterGroupItems>
+
+					</fb:FilterBar>
+
+				</VBox>
+
+			</f:DynamicPageHeader>
+
+		</f:header>
+
+		<f:content>
+
+			<Table
+
+				id="supplierTable"
+
+				class="prdSupplierTable sapUiResponsiveMargin"
+
+				items="{view>/filteredSuppliers}"
+
+				growing="true"
+
+				growingThreshold="25"
+
+				growingScrollToLoad="true"
+
+				busy="{view>/ui/busyKpi}"
+
+				alternateRowColors="true"
+
+				mode="SingleSelectMaster"
+
+				itemPress=".onItemPress"
+
+				sticky="ColumnHeaders">
+
+				<columns>
+
+					<Column demandPopin="true" minScreenWidth="Tablet">
+
+						<Link text="{i18n>colName}" press=".onColumnSortPress" class="prdSortHeader">
+
+							<customData>
+
+								<core:CustomData key="sortKey" value="supplierName" />
+
+							</customData>
+
+						</Link>
+
+					</Column>
+
+					<Column demandPopin="true" minScreenWidth="Tablet">
+
+						<Link text="{i18n>colCountry}" press=".onColumnSortPress" class="prdSortHeader">
+
+							<customData>
+
+								<core:CustomData key="sortKey" value="country" />
+
+							</customData>
+
+						</Link>
+
+					</Column>
+
+					<Column hAlign="End" demandPopin="true" minScreenWidth="Tablet">
+
+						<Link text="{i18n>colOrders}" press=".onColumnSortPress" class="prdSortHeader">
+
+							<customData>
+
+								<core:CustomData key="sortKey" value="totalOrders" />
+
+							</customData>
+
+						</Link>
+
+					</Column>
+
+					<Column hAlign="End" demandPopin="true" minScreenWidth="Desktop">
+
+						<Link text="{i18n>colAmount}" press=".onColumnSortPress" class="prdSortHeader">
+
+							<customData>
+
+								<core:CustomData key="sortKey" value="totalAmount" />
+
+							</customData>
+
+						</Link>
+
+					</Column>
+
+					<Column hAlign="End" demandPopin="true" minScreenWidth="Tablet">
+
+						<Link text="{i18n>colDelay}" press=".onColumnSortPress" class="prdSortHeader">
+
+							<customData>
+
+								<core:CustomData key="sortKey" value="averagePaymentDelayDays" />
+
+							</customData>
+
+						</Link>
+
+					</Column>
+
+					<Column hAlign="End" demandPopin="true" minScreenWidth="Tablet">
+
+						<Link text="{i18n>colLatePct}" press=".onColumnSortPress" class="prdSortHeader">
+
+							<customData>
+
+								<core:CustomData key="sortKey" value="latePercentage" />
+
+							</customData>
+
+						</Link>
+
+					</Column>
+
+					<Column hAlign="End" demandPopin="true" minScreenWidth="Tablet">
+
+						<Link text="{i18n>colLate}" press=".onColumnSortPress" class="prdSortHeader">
+
+							<customData>
+
+								<core:CustomData key="sortKey" value="lateOrders" />
+
+							</customData>
+
+						</Link>
+
+					</Column>
+
+					<Column hAlign="End" demandPopin="true" minScreenWidth="Tablet">
+
+						<Link text="{i18n>colOnTime}" press=".onColumnSortPress" class="prdSortHeader">
+
+							<customData>
+
+								<core:CustomData key="sortKey" value="onTimePaymentRate" />
+
+							</customData>
+
+						</Link>
+
+					</Column>
+
+					<Column demandPopin="false">
+
+						<Link text="{i18n>colRisk}" press=".onColumnSortPress" class="prdSortHeader">
+
+							<customData>
+
+								<core:CustomData key="sortKey" value="riskStatus" />
+
+							</customData>
+
+						</Link>
+
+					</Column>
+
+				</columns>
+
+				<ColumnListItem type="Navigation">
+
+					<cells>
+
+						<ObjectIdentifier title="{view>supplierName}" text="{view>supplierId}" />
+
+						<Text text="{view>country}" />
+
+						<Text text="{path: 'view>totalOrders', type: 'sap.ui.model.type.Integer'}" />
+
+						<Text text="{ parts: [{path: 'view>totalAmount'}], formatter: '.formatter.formatCurrencyEUR' }" />
+
+						<Text
+
+							text="{ parts: [{path: 'view>averagePaymentDelayDays'}], formatter: '.formatter.formatAvgDelayDays' }" />
+
+						<Text text="{ parts: [{path: 'view>latePercentage'}], formatter: '.formatter.formatPercent0to100' }" />
+
+						<Text text="{path: 'view>lateOrders', type: 'sap.ui.model.type.Integer'}" />
+
+						<Text text="{ parts: [{path: 'view>onTimePaymentRate'}], formatter: '.formatter.formatPercent' }" />
+
+						<ObjectStatus
+
+							title="{view>riskStatusText}"
+
+							state="{ parts: [{path: 'view>riskStatus'}], formatter: '.formatter.riskState' }"
+
+							icon="{ parts: [{path: 'view>riskStatus'}], formatter: '.formatter.riskIcon' }"
+
+							tooltip="{ parts: [{path: 'view>riskStatus'}], formatter: '.formatter.riskTooltipHint' }" />
+
+					</cells>
+
+				</ColumnListItem>
+
+			</Table>
+
+		</f:content>
+
+	</f:DynamicPage>
+
+</mvc:View>
+

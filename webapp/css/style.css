@@ -1,0 +1,165 @@
+.prdDashboardPage .sapFDynamicPageTitleMainNavigationActions {
+	gap: 0.25rem;
+}
+
+.prdHeroPanel .sapMPanelHdr {
+	border-bottom: none;
+}
+
+.prdKpiGrid.sapUiRespGrid .sapUiRespGridSpanL2 {
+	min-width: 0;
+}
+
+.prdKpiGrid .prdKpiTile.sapMGT {
+	min-height: 8rem;
+	border-radius: 0.75rem;
+	box-shadow: var(--sapContent_Shadow0);
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.prdKpiGrid .prdKpiTile.sapMGT:hover {
+	box-shadow: var(--sapContent_Shadow1);
+	transform: translateY(-1px);
+}
+
+/* Total orders: full width digit string (NumericContent clips ~5 digits in narrow L2 tiles) */
+.prdKpiTileOrderCount.sapMGT .sapMTileCnt,
+.prdKpiTileOrderCount.sapMGT .sapMGTContent,
+.prdKpiTileOrderCount.sapMGT .sapMTileCntContent {
+	overflow: visible;
+	max-width: none;
+}
+
+.prdKpiTileOrderCount .prdKpiOrderValueText {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	text-align: center;
+	font-size: 1.5rem;
+	font-weight: 400;
+	line-height: 1.25;
+	color: var(--sapTile_TextColor);
+	white-space: nowrap;
+}
+
+.prdKpiGreen.sapMGT {
+	box-shadow: inset 0 0 0 1px rgba(16, 126, 62, 0.35);
+}
+
+.prdKpiYellow.sapMGT {
+	box-shadow: inset 0 0 0 1px rgba(233, 115, 12, 0.35);
+}
+
+.prdKpiRed.sapMGT {
+	box-shadow: inset 0 0 0 1px rgba(187, 0, 0, 0.35);
+}
+
+.prdChartsPanel .prdChartGrid {
+	width: 100%;
+}
+
+.prdChartTile .sapVizFrame,
+.prdChartTile .sapUiVizFrame {
+	width: 100%;
+	min-height: 320px;
+	display: block;
+}
+
+.prdChartTile {
+	min-height: 360px;
+}
+
+.prdOrdersPerfTile {
+	min-height: 0;
+}
+
+.prdOrdersPerfScroll {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.prdOrdersPerfScroll .sapMVizFrame,
+.prdOrdersPerfScroll .sapUiVizFrame {
+	min-height: 3200px;
+}
+
+.prdSupplierTable .sapMListTblCell {
+	vertical-align: middle;
+}
+
+.prdLegendPanel .sapMPanelHdr {
+	background: transparent;
+}
+
+.prdToolbar.sapMTB {
+	padding-left: 0;
+}
+
+.prdKpiBusy.sapMBusyIndicator {
+	margin-right: 0.25rem;
+}
+
+.prdSortHeader {
+	font-weight: 600;
+}
+
+.prdRiskPiePanel .sapUiVizFrame,
+.prdRiskPiePanel .sapMVizFrame {
+	min-height: 360px;
+}
+
+.prdRiskDistGrid .prdRiskPiePanel {
+	min-height: 400px;
+	display: flex;
+	flex-direction: column;
+}
+
+.prdChartsMainPanel {
+	margin-top: 0.5rem;
+}
+
+.prdPayPerfSortBlock {
+	max-width: 42rem;
+	box-sizing: border-box;
+}
+
+.prdPayPerfSortBlock .prdPayPerfSelect.sapMSelect {
+	min-height: 2.5rem;
+	min-width: 100%;
+	width: 100%;
+	max-width: 100%;
+}
+
+.prdPayPerfSortBlock .sapMSltLabel {
+	overflow: visible;
+	text-overflow: clip;
+	white-space: normal;
+}
+
+.prdDashboardPage .sapFDynamicPageContent {
+	background: var(--sapBackgroundColor);
+}
+
+.prdHeroPanel .sapMPanelContent {
+	padding-top: 0.5rem;
+}
+
+.prdFilteredStrip {
+	border-left: 0.25rem solid var(--sapSelectedColor);
+	padding-left: 0.25rem;
+	margin-left: -0.25rem;
+	box-sizing: border-box;
+	border-radius: 0.125rem;
+}
+
+.prdSupplierTable .sapMListTblRow:not(.sapMLIBSelected):hover {
+	background: var(--sapList_Hover_Background);
+}
+
+.prdSupplierTable .sapMListTblHeaderCell {
+	font-weight: 600;
+}
+
+.prdLegendPanel .sapMMsgStrip {
+	max-width: 72rem;
+}
