@@ -20,9 +20,9 @@ sap.ui.define([], function () {
 	var SUPPLIER_COUNT = PORTFOLIO_GREEN_COUNT + PORTFOLIO_YELLOW_COUNT + PORTFOLIO_RED_COUNT;
 
 	var RISK_WINDOW_ORDER_COUNT = 3;
-	var RISK_RED_AVG_DELAY_DAYS = 10;
-	var RISK_RED_MIN_ORDERS_OVER_DELAY_DAYS = 2;
-	var RISK_RED_ORDER_DELAY_THRESHOLD = 10;
+	var RISK_GREEN_MAX_AVG_DELAY_DAYS = 3;
+	var RISK_YELLOW_MIN_AVG_DELAY_DAYS = 4;
+	var RISK_YELLOW_MAX_AVG_DELAY_DAYS = 10;
 
 	var COUNTRIES = ["Germany", "Poland", "Netherlands", "France", "Italy"];
 
@@ -376,44 +376,30 @@ sap.ui.define([], function () {
 
 	function calculateRiskStatus(supplier) {
 		var windowOrders = getOrdersForRiskWindow(supplier.orders, RISK_WINDOW_ORDER_COUNT);
-		var wi;
 		var len = windowOrders.length;
 		if (!len) {
 			return RISK.GREEN;
 		}
 
 		var sumDelay = 0;
-		var maxD = 0;
-		var ordersOver10 = 0;
-		var ordersOver3 = 0;
-
+		var wi;
 		for (wi = 0; wi < len; wi++) {
 			var dd = windowOrders[wi].delayDays || 0;
 			sumDelay += dd;
-			if (dd > maxD) {
-				maxD = dd;
-			}
-			if (dd > RISK_RED_ORDER_DELAY_THRESHOLD) {
-				ordersOver10++;
-			}
-			if (dd > 3) {
-				ordersOver3++;
-			}
 		}
 
 		var avgDelay = sumDelay / len;
 
-		if (avgDelay > RISK_RED_AVG_DELAY_DAYS || ordersOver10 >= RISK_RED_MIN_ORDERS_OVER_DELAY_DAYS) {
+		if (avgDelay > RISK_YELLOW_MAX_AVG_DELAY_DAYS) {
 			return RISK.RED;
 		}
 
-		if (
-			(avgDelay >= 4 && avgDelay <= RISK_RED_AVG_DELAY_DAYS) ||
-			(maxD >= 4 && maxD <= RISK_RED_AVG_DELAY_DAYS) ||
-			maxD > RISK_RED_ORDER_DELAY_THRESHOLD ||
-			ordersOver3 > 0
-		) {
+		if (avgDelay >= RISK_YELLOW_MIN_AVG_DELAY_DAYS && avgDelay <= RISK_YELLOW_MAX_AVG_DELAY_DAYS) {
 			return RISK.YELLOW;
+		}
+
+		if (avgDelay <= RISK_GREEN_MAX_AVG_DELAY_DAYS) {
+			return RISK.GREEN;
 		}
 
 		return RISK.GREEN;
